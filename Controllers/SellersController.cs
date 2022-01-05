@@ -40,6 +40,12 @@ namespace WebSales2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller)
         {
+            if (!ModelState.IsValid)
+            {
+                List<Department> departments = _departmentService.FindAll();
+                SellerFormViewModel viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
@@ -96,7 +102,12 @@ namespace WebSales2.Controllers
             {
                 return RedirectToAction(nameof(Error), new { message = "Seller not found" });
             }
-
+            if (!ModelState.IsValid)
+            {
+                List<Department> departmentsEdit = _departmentService.FindAll();
+                SellerFormViewModel viewModelEdit = new SellerFormViewModel { Seller = seller, Departments = departmentsEdit };
+                return View(viewModelEdit);
+            }
             List<Department> departments = _departmentService.FindAll();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
 
