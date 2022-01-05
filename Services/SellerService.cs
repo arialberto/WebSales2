@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebSales2.Models;
 using WebSales2.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebSales2.Services
 {
@@ -18,7 +19,7 @@ namespace WebSales2.Services
 
         public List<Seller> FindAll()
         {
-            return _context.Seller.ToList();
+            return _context.Seller.Include(obj => obj.Department).ToList();
         }
 
 
@@ -31,7 +32,7 @@ namespace WebSales2.Services
 
         public Seller FindById( int id)
         {
-            return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
         }
 
         public void Remove(int id)
